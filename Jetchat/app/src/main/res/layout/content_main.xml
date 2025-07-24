@@ -23,6 +23,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- [Navigation] 2. NavHost 추가
+        name : 구현 클래스 이름
+        defaultNavHost : 시스템이 뒤로가려고 할때 NavHostFragment가 인터셉트 한다.
+        navGraph : NavHostFragment와 Navigation Graph을 연결
+     -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
