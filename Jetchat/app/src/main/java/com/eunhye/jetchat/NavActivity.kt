@@ -6,10 +6,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.view.ViewCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.eunhye.jetchat.components.JetchatDrawer
+import com.eunhye.jetchat.databinding.ContentMainBinding
 
 class NavActivity : AppCompatActivity() {
 
@@ -30,9 +32,10 @@ class NavActivity : AppCompatActivity() {
             }
         )
         setContent {
-            JetchatDrawer(
-
-            )
+            JetchatDrawer() {
+                // 기존 View기반 레이아웃(XML, ViewBinding)화면을 Compose영역에 삽입하는 것
+                AndroidViewBinding(ContentMainBinding::inflate)
+            }
         }
     }
 
