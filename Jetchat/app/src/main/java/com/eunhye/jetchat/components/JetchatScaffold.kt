@@ -10,6 +10,9 @@ import com.eunhye.jetchat.theme.JetchatTheme
 @Composable
 fun JetchatDrawer(
     drawerState: DrawerState,
+    selectedMenu: String,
+    onProfileClicked: (String) -> Unit,
+    onChatClicked: (String) -> Unit,
     content: @Composable () -> Unit
 ) {
 
@@ -24,7 +27,9 @@ fun JetchatDrawer(
                     drawerContentColor = MaterialTheme.colorScheme.onBackground,
                 ) {
                     JetchatDrawerContent(
-                        {}, {}, ""
+                        onProfileClicked = onProfileClicked,
+                        onChatClicked = onChatClicked,
+                        selectedMenu = selectedMenu,
                     )
                 }
             },

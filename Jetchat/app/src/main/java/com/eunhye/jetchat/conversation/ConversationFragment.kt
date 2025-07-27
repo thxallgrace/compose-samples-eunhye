@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.eunhye.jetchat.MainViewModel
+import com.eunhye.jetchat.data.exampleUiState
 import com.eunhye.jetchat.theme.JetchatTheme
 
 class ConversationFragment : Fragment() {
@@ -23,7 +24,9 @@ class ConversationFragment : Fragment() {
             layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
             setContent {
                 JetchatTheme {
-                    ConversationContent()
+                    ConversationContent(
+                        uiState = exampleUiState
+                    )
                 }
             }
         }
