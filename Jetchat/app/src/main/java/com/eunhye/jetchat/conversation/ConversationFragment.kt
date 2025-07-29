@@ -25,7 +25,9 @@ class ConversationFragment : Fragment() {
             setContent {
                 JetchatTheme {
                     ConversationContent(
-                        uiState = exampleUiState
+                        uiState = exampleUiState,
+
+                        onNavIconPressed = { activityViewModel.openDrawer() }
                     )
                 }
             }
