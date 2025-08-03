@@ -42,6 +42,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,6 +61,7 @@ import com.eunhye.jetchat.R
 import com.eunhye.jetchat.components.JetchatAppBar
 import com.eunhye.jetchat.data.exampleUiState
 import com.eunhye.jetchat.theme.JetchatTheme
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,12 +69,17 @@ fun ConversationContent(
     uiState: ConversationUiState,
     onNavIconPressed: () -> Unit = { },
 ) {
+    // fake data
+    val authorMe = stringResource(R.string.author_me)
+    val timeNow = stringResource(id = R.string.now)
+
     // LazyRow, LazyColumn같은 리스트의 스크롤 상태를 기억하는 객체
     // 얼마나 스크롤되었는지, 어떤 아이템이 보이는지 등의 정보를 갖고 있음
     val scrollState = rememberLazyListState()
     val topBarState = rememberTopAppBarState()
     // 고정된 스크롤 동작을 만드는 함수
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topBarState)
+    val scope = rememberCoroutineScope()
 
     var background by remember {
         mutableStateOf(Color.Transparent)
@@ -106,8 +113,20 @@ fun ConversationContent(
             Messages(
                 messages = uiState.messages,
                 navigateToProfile = {},
+                modifier = Modifier.weight(1f),
             )
-            UserInput()
+            UserInput(
+                onMessageSent = { content ->
+                    uiState.addMessage(
+                        Message(authorMe, content, timeNow)
+                    )
+                },
+                resetScroll = {
+                    scope.launch {
+                        scrollState.scrollToItem(0)
+                    }
+                }
+            )
         }
     }
 }
