@@ -120,6 +120,7 @@ fun UserInput(onMessageSent: (String) -> Unit, modifier: Modifier = Modifier, re
                 currentInputSelector = currentInputSelector,
             )
             SelectorExpanded(
+                onCloseRequested = dismissKeyboard,
                 currentSelector = currentInputSelector,
                 onTextAdded = { textState = textState.addText(it) },
             )
@@ -330,6 +331,7 @@ private fun TextFieldValue.addText(newString: String): TextFieldValue {
 @Composable
 fun SelectorExpanded(
     currentSelector: InputSelector,
+    onCloseRequested: () -> Unit,
     onTextAdded: (String) -> Unit
 ) {
     if (currentSelector == InputSelector.NONE) return
@@ -346,7 +348,7 @@ fun SelectorExpanded(
     Surface(tonalElevation = 8.dp) {
         when(currentSelector) {
             InputSelector.EMOJI -> EmojiSelector(onTextAdded, focusRequester)
-            InputSelector.DM -> DmSelector()
+            InputSelector.DM -> NotAvailablePopup(onCloseRequested)
             InputSelector.PICTURE -> PictureSelector()
             InputSelector.MAP -> MapSelector()
             InputSelector.PHONE -> PhoneSelector()
@@ -454,15 +456,6 @@ fun EmojiTable(onTextAdded: (String) -> Unit, modifier: Modifier = Modifier) {
 fun NotAvailablePopup(onDismissed: () -> Unit) {
     FunctionalityNotAvailablePopup(onDismissed)
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun EmojiSelectorPreview() {
-//    EmojiSelector(onTextAdded = {}, focusRequester = FocusRequester())
-//}
-
-@Composable
-fun DmSelector() {}
 
 @Composable
 fun PictureSelector() {}
