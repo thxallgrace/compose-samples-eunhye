@@ -1,6 +1,12 @@
 package com.eunhye.jetchat.conversation
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFrom
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -53,6 +60,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -349,9 +357,9 @@ fun SelectorExpanded(
         when(currentSelector) {
             InputSelector.EMOJI -> EmojiSelector(onTextAdded, focusRequester)
             InputSelector.DM -> NotAvailablePopup(onCloseRequested)
-            InputSelector.PICTURE -> PictureSelector()
-            InputSelector.MAP -> MapSelector()
-            InputSelector.PHONE -> PhoneSelector()
+            InputSelector.PICTURE -> git FunctionalityNotAvailablePanel()
+            InputSelector.MAP -> FunctionalityNotAvailablePanel()
+            InputSelector.PHONE -> FunctionalityNotAvailablePanel()
             else -> {
                 throw NotImplementedError()
             }
@@ -458,13 +466,32 @@ fun NotAvailablePopup(onDismissed: () -> Unit) {
 }
 
 @Composable
-fun PictureSelector() {}
-
-@Composable
-fun MapSelector() {}
-
-@Composable
-fun PhoneSelector() {}
+fun FunctionalityNotAvailablePanel() {
+    AnimatedVisibility( // false상태에서 시작해 true로 바꿈으로써 "처음에 보이지 않다가 애니메이션을 통해 나타냄"을 의미
+        visibleState = remember { MutableTransitionState(false) }.apply { targetState = true },
+        enter = expandHorizontally() + fadeIn(), // 가로방향으로 확장 + 투명도 감소(불투명)
+        exit = shrinkHorizontally() + fadeOut(), // 가로방향으로 축소 + 투명도 증가 사라짐
+    ) {
+        Column(
+            modifier = Modifier
+                .height(320.dp)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = stringResource(id = R.string.not_available),
+                style = MaterialTheme.typography.titleMedium,
+            )
+            Text(
+                text = stringResource(id = R.string.not_available_subtitle),
+                modifier = Modifier.paddingFrom(FirstBaseline, before = 32.dp),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
+}
 
 @Preview
 @Composable
