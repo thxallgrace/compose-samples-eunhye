@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.compose.ui.platform.ComposeView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import com.eunhye.jetchat.MainViewModel
+import com.eunhye.jetchat.R
 import com.eunhye.jetchat.data.exampleUiState
 import com.eunhye.jetchat.theme.JetchatTheme
 
@@ -26,7 +29,14 @@ class ConversationFragment : Fragment() {
                 JetchatTheme {
                     ConversationContent(
                         uiState = exampleUiState,
-
+                        navigateToProfile =  { user ->
+                            // Click callback
+                            val bundle = bundleOf("userId" to user)
+                            findNavController().navigate(
+                                R.id.nav_profile,
+                                bundle,
+                            )
+                        },
                         onNavIconPressed = { activityViewModel.openDrawer() }
                     )
                 }

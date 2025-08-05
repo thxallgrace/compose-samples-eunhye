@@ -16,12 +16,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.viewinterop.AndroidViewBinding
+import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.eunhye.jetchat.components.JetchatDrawer
 import com.eunhye.jetchat.databinding.ContentMainBinding
+import kotlinx.coroutines.launch
 
 class NavActivity : AppCompatActivity() {
 
@@ -76,8 +78,21 @@ class NavActivity : AppCompatActivity() {
                     JetchatDrawer(
                         drawerState = drawerState,
                         selectedMenu = selectedMenu,
-                        onChatClicked = {},
-                        onProfileClicked = {},
+                        onChatClicked = {
+                            findNavController().popBackStack(R.id.nav_home, false)
+                            scope.launch {
+                                drawerState.close()
+                            }
+                            selectedMenu = it
+                        },
+                        onProfileClicked = {
+                            val bundle = bundleOf("userId" to it)
+                            findNavController().navigate(R.id.nav_profile, bundle)
+                            scope.launch {
+                                drawerState.close()
+                            }
+                            selectedMenu = it
+                        },
                     ) {
                         // 기존 View기반 레이아웃(XML, ViewBinding)화면을 Compose영역에 삽입하는 것
                         AndroidViewBinding(ContentMainBinding::inflate)
